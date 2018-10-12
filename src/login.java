@@ -20,7 +20,8 @@ public class login {
     static DB db;
     static DBCollection user;
     static DBObject checkUsername;
-    static DBObject checkName;
+    static DBObject checkPassword;
+    String passwordDB;
 
     public login() {
         clear.addActionListener(new ActionListener() {
@@ -33,7 +34,7 @@ public class login {
             @Override
             public void actionPerformed(ActionEvent e) {
                 connectDB();
-                
+                getUserFromDB();
             }
         });
     }
@@ -46,6 +47,7 @@ public class login {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(600,250));
         frame.setVisible(true);
+
     }
     public void connectDB(){
         try{
@@ -65,8 +67,35 @@ public class login {
     }
 
 
+    public void  getUserFromDB(){
+        BasicDBObject searchQuery1 = new BasicDBObject();
+        searchQuery1.put("username", username.getText());
+        String passwordTF = new String(password.getPassword());
+        checkUsername = user.findOne(searchQuery1);
+        if(checkUsername != null) {
+            BasicDBObject search = new BasicDBObject();
+            DBObject value  = user.findOne(search);
+            String name = (String) value.get("name");
+            String gender = (String) value.get("gender");
+             passwordDB = (String) value.get("password");
+            if(CheckPass(passwordDB,passwordTF)){
+
+                //gotolobby
+            }else {
+                JOptionPane.showMessageDialog(null, "รหัสไม่ถูกต้อง");
+                password.setText("");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "ไม่มี Username");
+            resetText();
+        }
 
 
-
-
+    }
+    public boolean CheckPass(String passwordDB,String passwordTF){
+        if(passwordDB.equals(passwordTF)){
+            return true;
+        }
+        return false;
+    }
 }
