@@ -22,6 +22,7 @@ public class register {
     private JTextField fileAddress;
     private JButton chooseImage;
     private JButton cancelButton;
+    private JTextField textField1;
     static MongoClientURI uri ;
     static MongoClient mongo ;
     static DB db;
